@@ -1,0 +1,89 @@
+1.新建模块，使用插件转化为mavenweb项目(打包方式war)
+
+2.引入依赖
+    <!--1 spring核心包-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>6.1.12</version>
+    </dependency>
+    <!--springmvc需要spring-webmvc，又依赖传递spring-web-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>6.1.12</version>
+    </dependency>
+    <!--需要引入jakarta.servlet-api依赖，否则报错
+        无法访问jakarta.servlet.ServletException
+        jakarta.servlet-api依赖的scope设为provided，即编译和测试时依赖生效
+        运行时不需要，直接由运行的tomcat提供
+        tomcat版本不低于10-->
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+3.编写controller和handler
+@Controller
+public class StudentController {
+    //1.编写方法
+    @RequestMapping("student/hello") //2 配置web访问该方法的url
+    @ResponseBody  //3 代表向浏览器直接返回数据
+    public String hello(){
+        String message="hello this is my first springmvc program";
+        System.out.println("message = " + message);
+        return message;
+    }
+}
+4.创建springmvc的配置类，功能类似spring的配置类
+@Configuration
+@ComponentScan(value = {"com.javaee.springmvc.controller"})
+public class MvcConfig {//功能类似springConfig
+    //配置handlerMapping
+    @Bean
+    public HandlerMapping handlerMapping(){
+        RequestMappingHandlerMapping handlerMapping = new RequestMappingHandlerMapping();
+        return handlerMapping;
+    }
+    //配置handlerAdapter
+    @Bean
+    public HandlerAdapter handlerAdapter(){
+        RequestMappingHandlerAdapter handlerAdapter = new RequestMappingHandlerAdapter();
+        return handlerAdapter;
+    }
+}
+
+5.创建SpringMvcIniter类必须继承AbstractAnnotationConfigDispatcherServletInitializer
+public class SpringMvcIniter extends AbstractAnnotationConfigDispatcherServletInitializer {
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class[0];
+    }
+
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        //1 配置springmvc的配置类
+        return new Class[]{MvcConfig.class};
+    }
+
+    @Override
+    protected String[] getServletMappings() {
+        /*2 配置前端控制器DS接收的请求url
+        功能类似web.xml配置
+        	<servlet-mapping>
+        		<servlet-name>ds</servlet-name>
+        		<url-pattern>/</url-pattern>
+        	</servlet-mapping>
+        */
+        return new String[]{"/"};
+    }
+}
+SpringMvcIniter类会在web服务启动时执行,完成以下工作:
+1）根据配置springmvc的配置类创建spring的web容器；
+2）根据配置spring的前端控制器接收的请求url，配置DispatcherServlet的url
+
+5.配置tomcat，部署 //tomcat应该是10+版本！方可支持 Jakarta EE API!
+6.浏览器输入url访问，验证
+http://localhost:8080/springmvc/student/hello

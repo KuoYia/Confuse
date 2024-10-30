@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">  
+  <modelVersion>4.0.0</modelVersion>  
+  <parent> 
+    <groupId>org.example</groupId>  
+    <artifactId>fakeSpring</artifactId>  
+    <version>1.0-SNAPSHOT</version> 
+  </parent>  
+  <artifactId>springmvc-quickStart-01</artifactId>  
+  <packaging>war</packaging>
+  <dependencies> 
+    <!--1 spring核心包-->  
+    <dependency> 
+      <groupId>org.springframework</groupId>  
+      <artifactId>spring-context</artifactId>  
+      <version>6.1.12</version> 
+    </dependency>  
+    <!--springmvc需要spring-webmvc，又依赖传递spring-web-->  
+    <dependency> 
+      <groupId>org.springframework</groupId>  
+      <artifactId>spring-webmvc</artifactId>  
+      <version>6.1.12</version> 
+    </dependency>  
+    <!--需要引入jakarta.servlet-api依赖，否则报错
+            无法访问jakarta.servlet.ServletException
+            jakarta.servlet-api依赖的scope设为provided，即编译和测试时依赖生效
+            运行时不需要，直接由运行的tomcat提供
+            tomcat版本不低于10-->  
+    <dependency> 
+      <groupId>jakarta.servlet</groupId>  
+      <artifactId>jakarta.servlet-api</artifactId>  
+      <version>6.0.0</version>  
+      <scope>provided</scope> 
+    </dependency> 
+  </dependencies> 
+</project>
