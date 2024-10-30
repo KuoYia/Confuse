@@ -127,4 +127,11 @@ public class PoetServiceImpl implements PoetService {
     public List<Poet> findPoetAndUsersWhoCollectedPoet(int id) {
         return poetDao.findPoetAndUsersWhoCollectedPoet(id);
     }
+
+
+
+    // 构造函数 - 构造注入
+    public PoetServiceImpl(PoetDao poetDao) {
+        this.poetDao = poetDao;
+    }
 }
