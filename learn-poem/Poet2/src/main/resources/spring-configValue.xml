@@ -2,17 +2,15 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+
        xsi:schemaLocation="
-           http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd
-           http://www.springframework.org/schema/context 
+           http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context.xsd
-           ">
+      ">
 
-    <!-- 扫描注解配置 -->
-    <context:component-scan base-package="com.clover"/>
-
-
+    <!-- 加载外部属性文件 -->
     <context:property-placeholder location="classpath:jdbc.properties"/>
 
     <!-- 数据源配置 -->
@@ -23,7 +21,7 @@
         <property name="password" value="${jdbc.password}"/>
     </bean>
 
-    <!-- SqlSessionFactory配置 -->
+    <!-- SqlSessionFactory配置，用于MyBatis的会话工厂 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
     </bean>
@@ -32,4 +30,13 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.clover.dao"/>
     </bean>
+
+
+
+    <!-- Service Bean配置，使用设值注入 -->
+    <bean id="poetService" class="com.clover.service.impl.PoetServiceImpl">
+        <!-- 注入Dao层的bean -->
+        <property name="poetDao" ref="poetDao"/>
+    </bean>
+
 </beans>

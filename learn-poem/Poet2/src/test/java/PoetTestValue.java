@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-
 import com.clover.dao.PoetDao;
 import com.clover.pojo.Poet;
 import com.clover.service.PoetService;
@@ -14,12 +13,9 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-// 使用SpringExtension来支持Spring测试上下文
-//@ExtendWith(SpringExtension.class) 是JUnit 5中用于集成Spring测试上下文的注解，它来自于spring-test模块
 @ExtendWith(SpringExtension.class)
-// 指定Spring测试上下文的配置文件位置
-@ContextConfiguration(locations = "classpath:spring-config-annotation.xml")
-public class PoetTestMixed {
+@ContextConfiguration(locations = "classpath:spring-configValue.xml") // 指定XML配置文件的位置
+public class PoetTestValue {
 
     @Autowired
     private PoetService poetService;

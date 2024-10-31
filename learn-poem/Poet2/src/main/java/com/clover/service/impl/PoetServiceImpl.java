@@ -1,6 +1,7 @@
 package com.clover.service.impl;
 
 import com.clover.dao.PoetDao;
+import com.clover.dao.impl.PoetDaoImpl;
 import com.clover.pojo.Poet;
 import com.clover.pojo.Poem;
 import com.clover.service.PoetService;
@@ -132,6 +133,12 @@ public class PoetServiceImpl implements PoetService {
 
     // 构造函数 - 构造注入
     public PoetServiceImpl(PoetDao poetDao) {
+        this.poetDao = poetDao;
+    }
+
+    // setter方法 - 设值注入
+    // 注意：虽然这里提供了setter方法，但在构造注入的情况下通常不使用它来注入依赖
+    public void setPoetDao(PoetDao poetDao) {
         this.poetDao = poetDao;
     }
 }
