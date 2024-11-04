@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "classpath:spring-configValue.xml") // 指定XML配置文件的位置
+
 public class PoetTestValue {
 
     @Autowired

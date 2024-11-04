@@ -1,0 +1,313 @@
+
+
+
+
+
+Request processing failed: java.lang.IllegalArgumentException:
+Name for argument of type [java.lang.String] not specified,
+and parameter name information not available via reflection.
+Ensure that the compiler uses the '-parameters' flag.
+https://www.cnblogs.com/bky-wang/p/18207447
+
+#### 2.2.1 param 和 json参数比较
+在 HTTP 请求中，我们可以选择不同的参数类型，如 param 类型和 JSON 类型。
+下面对这两种参数类型进行区别和对比：
+1.  参数编码：
+param 类型的参数会被编码为 ASCII 码。
+例如，假设 `name=john doe`，则会被编码为 `name=john%20doe`。
+而 JSON 类型的参数会被编码为 UTF-8。
+
+2.  参数顺序：
+    param 类型的参数没有顺序限制。
+    但是，JSON 类型的参数是有序的。
+    JSON 采用键值对的形式进行传递，其中键值对是有序排列的。
+
+3.  数据类型：
+    param 类型的参数仅支持字符串类型、数值类型和布尔类型等简单数据类型。
+    而 JSON 类型的参数则支持更复杂的数据类型，如数组、对象等。
+
+4.  嵌套性：
+    param 类型的参数不支持嵌套。
+    但是，JSON 类型的参数支持嵌套，可以传递更为复杂的数据结构。
+
+5.  可读性：
+    param 类型的参数格式比 JSON 类型的参数更加简单、易读。
+    但是，JSON 格式在传递嵌套数据结构时更加清晰易懂。
+
+总的来说，param 类型的参数适用于单一的数据传递，
+而 JSON 类型的参数则更适用于更复杂的数据结构传递。
+根据具体的业务需求，需要选择合适的参数类型。
+在实际开发中，常见的做法是：
+在 GET 请求中采用 param 类型的参数，而在 POST 请求中采用 JSON 类型的参数传递。
+
+
+#### 2.2.2 param参数接收
+1.  **直接接值**
+    handler接收参数
+    只要形参数名和类型与传递参数相同，即可自动接收!
+    @RequestMapping("param")
+    @Controller
+    public class ParamController {
+
+    /*
+    * 1.1方法形参于request的参数同名
+    * 前端请求: http://localhost:8080/param/sameName?id=1&name=lily
+    *
+    * 出现乱码正常，json接收具体解决！！
+    * @return 返回前端数据
+     */
+    @RequestMapping("sameName")
+    @ResponseBody
+    public String update(int id, String name){
+        System.out.println("id = " + id + ", name = " + name);
+        return "param/sameName";
+    }
+
+2.  **@RequestParam注解**
+    可以使用 `@RequestParam` 注解将 Servlet 请求参数（即查询参数或表单数据）绑定到控制器中的方法参数。
+    @RequestParam`使用场景：
+    -   指定绑定的请求参数名
+    -   要求请求参数必须传递
+    -   为请求参数提供默认值
+        基本用法如下：
+     /*
+     * 1.2方法形参于request的参数不同名，使用注解
+     * 前端请求: http://localhost:8080/param/notSameName?snum=1001&sname=lily&sage=10
+     *
+     *  使用@RequestParam注解标记handler方法的形参
+     *  指定形参对应的请求参数@RequestParam(请求参数名称)
+     */
+    @RequestMapping("notSameName")
+    @ResponseBody
+    public String add(@RequestParam(value = "snum") int num,
+                      @RequestParam(value = "sname") String name,
+                      @RequestParam(value = "sage") int age){
+        System.out.println("num = " + num + ", name = " + name + ", age = " + age);
+        return "param/notSameName";
+    }
+
+    默认情况下，使用此批注的方法参数是必需的，
+    但您可以通过将 `@RequestParam` 批注的 `required` 标志设置为 `false`！
+    如果没有设置非必须，也没有传递参数会出现：http400错误
+
+    将参数设置非必须，并且设置默认值：
+    @RequestParam(value = "snum") 等价 @RequestParam(value = "snum",required = true)
+    */
+    @RequestMapping("notSameName")
+    @ResponseBody
+    public String add(@RequestParam(value = "snum") int num,
+                      @RequestParam(value = "sname") String name,
+                      @RequestParam(value = "sage",required = false,defaultValue = "18") int age){
+        System.out.println("num = " + num + ", name = " + name + ", age = " + age);
+        return "param/notSameName";
+    }
+
+3. **一名多值**
+  /*
+   * 1.3 一名多值
+   * 前端请求: http://localhost:8080/param/arrayValue?ids=1&ids=3&ids=9
+   * 多选框，提交的数据的时候一个key对应多个值(如批量删除)，即一名多值,
+   * 一名多值可以使用集合或数组进行接收,但需要使用@RequestParam注解指定!
+   */
+    @RequestMapping("arrayValue")
+    @ResponseBody
+    public String delete(@RequestParam int[] ids){//@RequestParam List<Integer> ids
+        System.out.println("ids = " + Arrays.toString(ids));
+        return "param/arrayValue";
+    }
+
+4. **实体接收**
+        Spring MVC 是 Spring 框架提供的 Web 框架，它允许开发者使用实体对象来接收 HTTP 请求中的参数。
+        通过这种方式，可以在方法内部直接使用对象的属性来访问请求参数，而不需要每个参数都写一遍。
+        下面是一个使用实体对象接收参数的示例
+        定义一个用于接收参数的实体类：
+        public class Student {
+              private int id;
+              private String number;
+              private String name;
+              private int age;
+              private String intro;
+          // getter 和 setter 略
+        }
+        在控制器中，使用实体对象接收，示例代码如下：
+        //1.4 实体类接收，类的属性与请求参数同名
+        //http://localhost:8080/param/entityClass?id=1&number=1001&name=wanglwei&age=30
+        @ResponseBody
+        @RequestMapping(value = "/entityClass", method = RequestMethod.POST)
+        public String update(Student student){
+            System.out.println("student = " + student);
+            return "param/entityClass";
+        }
+        在上述代码中，将请求参数id,number,name和age映射到实体类属性上！
+        要求属性名必须等于参数名！否则无法映射！
+        浏览器发出的都是get请求
+        这里要求时post请求，需要使用postman工具，模拟post请求传递参数，进行测试
+
+#### 2.2.3 路径 参数接收
+路径传递参数是一种在 URL 路径中传递参数的方式。
+在 RESTful 的 Web 应用程序中，经常使用路径传递参数来表示资源的唯一标识符或更复杂的表示方式。
+而 Spring MVC 框架提供了 @PathVariable 注解来处理路径传递参数。
+@PathVariable注解允许将 URL 中的占位符映射到控制器方法中的参数。
+
+例如，如果我们想将 `/user/{id}` 路径下的 `{id}` 映射到控制器方法的一个参数中，
+则可以使用 `@PathVariable` 注解来实现。
+
+下面是一个使用 `@PathVariable` 注解处理路径传递参数的示例：
+
+ /**
+ * 动态路径设计: /user/{动态部分}/{动态部分}   动态部分使用{}包含即可! {}内部动态标识!
+ * 形参列表取值: @PathVariable Long id  如果形参名 = {动态标识} 自动赋值!
+ *             @PathVariable("动态标识") Long id  如果形参名 != {动态标识} 可以通过指定动态标识赋值!
+ *
+ * 访问测试:  /param/user/1/root  -> id = 1  uname = root
+ */
+@Controller
+public class PathController {
+    //@PathVariable获取请求路径的参数
+    @GetMapping("/student/{id}/{sname}")
+    @ResponseBody
+    public String updateName(@PathVariable Long id,
+                             @PathVariable(value = "sname",required = true) String name) {
+        System.out.println("id = " + id + ", name = " + name);
+        return "update student name";
+    }
+}
+
+#### 2.2.4 json参数接收
+前端传递 JSON 数据时，Spring MVC 框架可以使用 `@RequestBody` 注解来将 JSON 数据转换为 Java 对象。
+`@RequestBody` 注解表示当前方法参数的值应该从请求体中获取，
+并且需要指定 value 属性来指示请求体应该映射到哪个参数上。其使用方式和示例代码如下：
+1.  前端发送 JSON 数据的示例：（使用postman测试）
+    {
+    "number":"1002",
+    "name":"lucy",
+    "age":22,
+    "intro":"大四学生"
+    }
+2.  定义一个用于接收 JSON 数据的 Java 类，例如：
+    public class Student {
+        private int id;
+        private String number;
+        private String name;
+        private int age;
+        private String intro;
+        // getter 和 setter 略
+    }
+3.  在控制器中，使用 `@RequestBody` 注解来接收 JSON 数据，并将其转换为 Java 对象，例如：
+    @Controller
+    public class JsonController {
+
+        /*
+         *1 添加json解析的依赖jackson-databind
+         *2 添加json解析器 @EnableWebMvc
+         *3 post请求
+         *4 @RequestBody接收json格式的请求数据
+         *  @ResponseBody 将返回值转换为json格式
+         */
+        @ResponseBody
+        @RequestMapping(value = "json/add",method = RequestMethod.POST)
+    //  @PostMapping("json/add")
+        public Student addStudent(@RequestBody Student student){
+            System.out.println("student = " + student);
+            student.setId(111);
+            return student;
+        }
+    }
+    在上述代码中，`@RequestBody` 注解将请求体中的 JSON 数据映射到 `Student` 类型的 `student` 参数上，
+    并将其作为一个对象来传递给 `addStudent()` 方法作为实参进行处理。
+4.  完善配置
+    测试：
+    问题：
+    org.springframework.web.HttpMediaTypeNotSupportedException: Content-Type 'application/json;charset=UTF-8' is not supported]
+
+    原因：
+    -   不支持json数据类型处理
+    -   没有json类型处理的工具（jackson）
+        解决：
+    springmvc handlerAdpater配置json转化器,配置类需要明确：
+    //TODO: SpringMVC对应组件的配置类 [声明SpringMVC需要的组件信息]
+    //TODO: 导入handlerMapping和handlerAdapter的三种方式
+     //1.自动导入handlerMapping和handlerAdapter [推荐]
+     //2.可以不添加,springmvc会检查是否配置handlerMapping和handlerAdapter,没有配置默认加载
+     //3.使用@Bean方式配置handlerMapper和handlerAdapter
+    @EnableWebMvc  //json数据处理,必须使用此注解,因为他会加入json处理器
+    @Configuration
+    @ComponentScan(basePackages = "com.javaee.input") //TODO: 进行controller扫描
+
+    //WebMvcConfigurer springMvc进行组件配置的规范,配置组件,提供各种方法! 前期可以实现
+    public class MvcConfig{
+
+    }
+    pom.xml 加入jackson依赖
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.15.0</version>
+    </dependency>
+5.  @EnableWebMvc注解说明
+    @EnableWebMvc注解效果等同于在 XML 配置中，可以使用 `<mvc:annotation-driven>` 元素！
+    我们来解析`<mvc:annotation-driven>`对应的解析工作！
+
+    让我们来查看下`<mvc:annotation-driven>`具体的动作！
+    -   先查看`<mvc:annotation-driven>`标签最终对应解析的Java类
+
+        ![](image/image_WJXPabVDSl.png)
+    -   查看解析类中具体的动作即可
+
+        打开源码：org.springframework.web.servlet.config.MvcNamespaceHandler
+
+        ![](image/image_37KWhccu6c.png)
+
+        打开源码：org.springframework.web.servlet.config.AnnotationDrivenBeanDefinitionParser
+        ```java
+        class AnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
+
+          public static final String HANDLER_MAPPING_BEAN_NAME = RequestMappingHandlerMapping.class.getName();
+
+          public static final String HANDLER_ADAPTER_BEAN_NAME = RequestMappingHandlerAdapter.class.getName();
+
+          static {
+            ClassLoader classLoader = AnnotationDrivenBeanDefinitionParser.class.getClassLoader();
+            javaxValidationPresent = ClassUtils.isPresent("jakarta.validation.Validator", classLoader);
+            romePresent = ClassUtils.isPresent("com.rometools.rome.feed.WireFeed", classLoader);
+            jaxb2Present = ClassUtils.isPresent("jakarta.xml.bind.Binder", classLoader);
+            jackson2Present = ClassUtils.isPresent("com.fasterxml.jackson.databind.ObjectMapper", classLoader) &&
+                    ClassUtils.isPresent("com.fasterxml.jackson.core.JsonGenerator", classLoader);
+            jackson2XmlPresent = ClassUtils.isPresent("com.fasterxml.jackson.dataformat.xml.XmlMapper", classLoader);
+            jackson2SmilePresent = ClassUtils.isPresent("com.fasterxml.jackson.dataformat.smile.SmileFactory", classLoader);
+            jackson2CborPresent = ClassUtils.isPresent("com.fasterxml.jackson.dataformat.cbor.CBORFactory", classLoader);
+            gsonPresent = ClassUtils.isPresent("com.google.gson.Gson", classLoader);
+          }
+
+          @Override
+          @Nullable
+          public BeanDefinition parse(Element element, ParserContext context) {
+            //handlerMapping加入到ioc容器
+            readerContext.getRegistry().registerBeanDefinition(HANDLER_MAPPING_BEAN_NAME, handlerMappingDef);
+
+            //添加jackson转化器
+            addRequestBodyAdvice(handlerAdapterDef);
+            addResponseBodyAdvice(handlerAdapterDef);
+
+            //handlerAdapter加入到ioc容器
+            readerContext.getRegistry().registerBeanDefinition(HANDLER_ADAPTER_BEAN_NAME, handlerAdapterDef);
+            return null;
+          }
+
+          //具体添加jackson转化对象方法
+          protected void addRequestBodyAdvice(RootBeanDefinition beanDef) {
+            if (jackson2Present) {
+              beanDef.getPropertyValues().add("requestBodyAdvice",
+                  new RootBeanDefinition(JsonViewRequestBodyAdvice.class));
+            }
+          }
+
+          protected void addResponseBodyAdvice(RootBeanDefinition beanDef) {
+            if (jackson2Present) {
+              beanDef.getPropertyValues().add("responseBodyAdvice",
+                  new RootBeanDefinition(JsonViewResponseBodyAdvice.class));
+            }
+          }
+
+        ```
+

@@ -13,6 +13,7 @@
         <module>Apple</module>
         <module>spring-aop-annotation-05</module>
         <module>springmvc-quickStart-01</module>
+        <module>springmvc-input-02</module>
     </modules>
 <dependencyManagement>
     <dependencies>
