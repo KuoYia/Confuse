@@ -47,7 +47,7 @@ public class LoggingAspect {
             // 打印日志，显示方法执行后的时间、类名、方法名和返回值
             System.out.println("KuoYian结束时间:"+calledTime + " - " + className + " - " + methodName + " - Returned: " + result);
         }
-    }
+
 
     @Pointcut("execution(* com.clover.service.impl.PoetServiceImpl.findById(..))")
     public void findByIdExecution() {}
