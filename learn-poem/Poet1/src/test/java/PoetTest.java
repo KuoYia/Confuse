@@ -38,10 +38,10 @@ public class PoetTest {
     public void testFindByMultipleConditions() {
         // 测试根据多个条件查询Poet对象
         PoetDao poetMapper = applicationContext.getBean(PoetDao.class);
-        List<Poet> poets = poetMapper.findByMultipleConditions("李白", "", "");
+        List<Poet> poets = poetService.findByMultipleConditions("李白", "", "");
         // 打印查询到的Poet对象信息
-        for (Poet poet : poets) {
+       /* for (Poet poet : poets) {
             System.out.println(poet);
-        }
+        }*/
     }
 }
