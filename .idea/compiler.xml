@@ -12,7 +12,9 @@
         <module name="springmvc-quickStart-01" />
         <module name="Poet1" />
         <module name="spring-aop-annotation-04" />
+        <module name="springmvc-RESTFul-03" />
         <module name="springmvc-input-02" />
+        <module name="Poet3" />
         <module name="Poet2" />
       </profile>
     </annotationProcessing>
@@ -23,14 +25,18 @@
       <module name="Poet" target="1.8" />
       <module name="Poet1" target="1.8" />
       <module name="Poet2" target="1.8" />
+      <module name="Poet3" target="1.8" />
       <module name="spring-aop-annotation-04" target="1.8" />
       <module name="spring-aop-annotation-05" target="1.8" />
       <module name="springmvc-input-02" target="1.8" />
       <module name="springmvc-quickStart-01" target="1.8" />
+      <module name="springmvc-RESTFul-03" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Poet3" options="-parameters" />
+      <module name="springmvc-RESTFul-03" options="-parameters" />
       <module name="springmvc-input-02" options="-parameters" />
     </option>
   </component>

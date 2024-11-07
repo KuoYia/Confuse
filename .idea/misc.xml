@@ -3,6 +3,8 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/fakeSpring/springmvc-input-02" />
     <file type="web" url="file://$PROJECT_DIR$/fakeSpring/springmvc-quickStart-01" />
+    <file type="web" url="file://$PROJECT_DIR$/fakeSpring/springmvc-RESTFul-03" />
+    <file type="web" url="file://$PROJECT_DIR$/learn-poem/Poet3" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">

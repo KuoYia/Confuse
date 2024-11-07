@@ -1,0 +1,25 @@
+GET http://localhost:80/api/item?id=99
+Accept: application/json
+
+###
+GET http://localhost:8080/springmvc03/login?username=admin&password=12345
+Accept: application/json
+
+###
+GRAPHQL http://localhost:8080/springmvc03/share/delete/1
+
+query {
+    greetings
+}
+
+{
+  "varName": "varValue"
+}
+
+###
+POST http://localhost:8080/springmvc03/share/delete/1
+Content-Type: application/json
+
+{}
+
+###

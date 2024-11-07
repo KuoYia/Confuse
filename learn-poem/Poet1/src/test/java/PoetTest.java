@@ -6,7 +6,8 @@ import com.clover.pojo.Poet;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.clover.service.PoetService;
+
+import com.clover.service.impl.PoetServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,14 +18,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PoetTest {
 
     private AnnotationConfigApplicationContext applicationContext;
-    private PoetService poetService;
+    private PoetServiceImpl poetService;
 
     @BeforeEach
     public void setUp() {
         // 创建Spring应用上下文
         applicationContext = new AnnotationConfigApplicationContext(SpringConfig.class);
         // 从应用上下文中获取PoetService的bean
-        poetService = applicationContext.getBean(PoetService.class);
+        poetService = applicationContext.getBean(PoetServiceImpl.class);
     }
 
     @AfterEach

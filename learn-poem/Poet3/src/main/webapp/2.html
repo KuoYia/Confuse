@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Poet Management</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 5px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+<h1>Poet Management</h1>
+
+<!-- Add Poet Form -->
+<h2>Add Poet</h2>
+<form id="addPoetForm">
+  Name: <input type="text" id="name"><br>
+  Dynasty: <input type="text" id="dynasty"><br>
+  Biography: <textarea id="biography"></textarea><br>
+  <input type="button" value="Add Poet" onclick="addPoet()">
+</form>
+
+<!-- Update Poet Form -->
+<h2>Update Poet</h2>
+<form id="updatePoetForm">
+  ID: <input type="text" id="poetId"><br>
+  Name: <input type="text" id="updateName"><br>
+  Dynasty: <input type="text" id="updateDynasty"><br>
+  Biography: <textarea id="updateBiography"></textarea><br>
+  <input type="button" value="Update Poet" onclick="updatePoet()">
+</form>
+
+<!-- Delete Poet -->
+<h2>Delete Poet</h2>
+<form id="deletePoetForm">
+  ID: <input type="text" id="deleteId"><br>
+  <input type="button" value="Delete Poet" onclick="deletePoet()">
+</form>
+
+<!-- Get Poet By ID -->
+<h2>Get Poet By ID</h2>
+<form id="getPoetByIdForm">
+  ID: <input type="text" id="getId"><br>
+  <input type="button" value="Get Poet" onclick="getPoetById()">
+</form>
+
+<!-- Display Poet Information -->
+<h2>Poet Information</h2>
+<table id="poetTable">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Dynasty</th>
+    <th>Biography</th>
+  </tr>
+</table>
+
+<script>
+  function addPoet() {
+    $.ajax({
+      url: 'http://localhost:8080/api/poets/',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        name: $('#name').val(),
+        dynasty: $('#dynasty').val(),
+        biography: $('#biography').val()
+      }),
+      success: function(response) {
+        alert('Poet added successfully');
+      },
+      error: function(error) {
+        alert('Error adding poet');
+      }
+    });
+  }
+
+  function updatePoet() {
+    $.ajax({
+      url: 'http://localhost:8080/api/poets/',
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        id: $('#poetId').val(),
+        name: $('#updateName').val(),
+        dynasty: $('#updateDynasty').val(),
+        biography: $('#updateBiography').val()
+      }),
+      success: function(response) {
+        alert('Poet updated successfully');
+      },
+      error: function(error) {
+        alert('Error updating poet');
+      }
+    });
+  }
+
+  function deletePoet() {
+    $.ajax({
+      url: 'http://localhost:8080/api/poets/' + $('#deleteId').val(),
+      type: 'DELETE',
+      success: function(response) {
+        alert('Poet deleted successfully');
+      },
+      error: function(error) {
+        alert('Error deleting poet');
+      }
+    });
+  }
+
+  function getPoetById() {
+    $.ajax({
+      url: 'http://localhost:8080/api/poets/' + $('#getId').val(),
+      type: 'GET',
+      success: function(response) {
+        $('#poetTable').append('<tr><td>' + response.id + '</td><td>' + response.name + '</td><td>' + response.dynasty + '</td><td>' + response.biography + '</td></tr>');
+      },
+      error: function(error) {
+        alert('Error fetching poet');
+      }
+    });
+  }
+</script>
+</body>
+</html>

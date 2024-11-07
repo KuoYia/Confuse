@@ -1,0 +1,82 @@
+1.1 返回json数据
+@ResponseBody
+加在handler方法上，该方法的返回值会被转换成json数据发送到前端；
+加在controller类上，该类中所有方法的返回值会被转换成json数据发送到前端；
+
+@ResponseBody+@Controller  = @RestController
+
+配置：
+1）添加json处理的依赖
+2）配置类加@EnableWebMvc
+
+1.2 共享域的使用
+场景共享域对象HttpSession、ServletContext
+ServletContext可直接通过@AutoWired装配
+HttpSession在handler方法形参声明
+案例1：
+用户登录时，将用户信息保存到HttpSession
+案例2：
+记录某个方法被调用的次数，将次数保存到ServletContext中
+
+1.3 访问静态资源
+在webapp下创建文件目录static/images，在该目录下放图片，浏览器应该可直接访问该图片！
+http://localhost:8080/springmvc03/static/images/qie.jpeg
+访问报错原因：设置了DispatcherServlet接收一切请求，它只能处理@RequestMapping对应的请求。
+解决办法:在配置类中启用静态资源处理
+此时要求配置类实现接口WebMvcConfigurer，实现里面的configureDefaultServletHandling方法。
+
+
+2 RESTFul风格实战
+0 准备工作：
+新建模块，转化成mavenweb模块
+引入3个必须的依赖
+建好项目的包结构和po类:Student
+
+任务：接收前端前端发送的学生增删改查等http请求
+1）添加学生，前端发送json格式学生数据
+2）根据id删除学生
+3）修改学生，前端发送json格式学生数据
+4）根据id查询学生
+5）分页查询学生（参数请求页码和每页数据量）
+6）模糊查询学生（参数请求页码和每页数据量，查询关键字）
+
+2.1.非rest风格路径设计
+1）添加学生，前端发送json格式学生数据
+   /student/add post请求
+2）根据id删除学生
+   /student/delete?id=1 get请求
+3）修改学生，前端发送json格式学生数据
+   /student/update  post请求
+4）根据id查询学生
+   /student/query?id=1  get请求
+5）分页查询学生（参数请求页码和每页数据量）
+   /student/queryByPage?page=1&pageSize=10  get请求
+6）模糊查询学生（参数请求页码和每页数据量，查询关键字）
+   /student/queryByKey?key=value&page=1&pageSize=10  get请求
+
+问题：
+1）路径作为标识应尽量采用名词，避免动词
+2）http的请求使用不符合规范，没有规矩不成方圆。
+3）参数的传递 json/param/path
+
+http的设计者提出了rest风格,规范使用http请求。
+1.rest风格路径设计
+1）添加学生，前端发送json格式学生数据
+   /student  post请求  json
+2）根据id删除学生
+   /student/1   delete请求    path
+3）修改学生，前端发送json格式学生数据
+   /student/  put请求 json
+4）根据id查询学生
+   /student/1  get请求
+5）分页查询学生（参数请求页码和每页数据量）
+   /student/queryByPage?page=1&size=10  get请求  param
+6）模糊查询学生（参数请求页码和每页数据量，查询关键字）
+   /student/queryByKey?key=value&page=1&pageSize=10  get请求
+
+tips:
+复杂数据用json，简单数据用path或param
+当uri对应一个资源用path传递参数
+当uri对应多个资源用param传递参数
+
+

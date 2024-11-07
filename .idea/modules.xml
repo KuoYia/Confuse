@@ -6,11 +6,13 @@
       <module fileurl="file://$PROJECT_DIR$/Poet.iml" filepath="$PROJECT_DIR$/Poet.iml" />
       <module fileurl="file://$PROJECT_DIR$/Poet1.iml" filepath="$PROJECT_DIR$/Poet1.iml" />
       <module fileurl="file://$PROJECT_DIR$/Poet2.iml" filepath="$PROJECT_DIR$/Poet2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Poet3.iml" filepath="$PROJECT_DIR$/Poet3.iml" />
       <module fileurl="file://$PROJECT_DIR$/fakeSpring.iml" filepath="$PROJECT_DIR$/fakeSpring.iml" />
       <module fileurl="file://$PROJECT_DIR$/learn-poem.iml" filepath="$PROJECT_DIR$/learn-poem.iml" />
       <module fileurl="file://$PROJECT_DIR$/realSpring.iml" filepath="$PROJECT_DIR$/realSpring.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-aop-annotation-04.iml" filepath="$PROJECT_DIR$/spring-aop-annotation-04.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-aop-annotation-05.iml" filepath="$PROJECT_DIR$/spring-aop-annotation-05.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springmvc-RESTFul-03.iml" filepath="$PROJECT_DIR$/springmvc-RESTFul-03.iml" />
       <module fileurl="file://$PROJECT_DIR$/springmvc-input-02.iml" filepath="$PROJECT_DIR$/springmvc-input-02.iml" />
       <module fileurl="file://$PROJECT_DIR$/springmvc-quickStart-01.iml" filepath="$PROJECT_DIR$/springmvc-quickStart-01.iml" />
     </modules>

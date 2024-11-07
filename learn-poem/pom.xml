@@ -12,6 +12,7 @@
         <module>Poet</module>
         <module>Poet1</module>
         <module>Poet2</module>
+        <module>Poet3</module>
     </modules>
 
     <dependencies>
